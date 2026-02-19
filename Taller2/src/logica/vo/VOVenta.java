@@ -1,4 +1,4 @@
-package vo;
+package logica.vo;
 
 public class VOVenta {
 	 private int num;
