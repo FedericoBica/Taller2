@@ -7,7 +7,13 @@ public class VOVenta {
 	 private String estado;
 	 private float montoTotal;	
 
-	 public VOVenta() {}
+	 public VOVenta(int num, String fecha, String direccionEntrega, String estado, float montoTotal) {
+		  this.num = num;
+		  this.fecha = fecha;
+		  this.direccionEntrega = direccionEntrega;
+		  this.estado = estado;
+		  this.montoTotal = montoTotal;
+}
 	 
 	 public int getNum() {
 		 return num;
