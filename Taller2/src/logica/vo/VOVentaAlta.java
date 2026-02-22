@@ -1,16 +1,17 @@
 package logica.vo;
-import logica.Fecha;
+
+import java.time.LocalDate;
 
 public class VOVentaAlta {
-    public Fecha fechaVenta;
+    public LocalDate fechaVenta;
     public String direccionEntrega;
 
-    public VOVentaAlta(Fecha fechaVenta, String direccionEntrega){
+    public VOVentaAlta(LocalDate fechaVenta, String direccionEntrega){
         this.fechaVenta=fechaVenta;
         this.direccionEntrega=direccionEntrega; 
     }
 
-    public Fecha getFechaVenta(){
+    public LocalDate getFechaVenta(){
     	return fechaVenta;
     }
     public String getDireccionEntrega(){

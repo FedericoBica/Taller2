@@ -1,12 +1,10 @@
 package logica.vo;
 
-
 public class VOPostreListado {
     private String codigo;
     private String nombre;
     private float precio;
     private String tipo;
-
 
 public String getCodigo(){
   return codigo;
@@ -23,5 +21,4 @@ public float getPrecio(){
 public String getTipo(){
   return tipo;
 }
-
 }
