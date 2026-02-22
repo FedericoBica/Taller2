@@ -1,21 +1,30 @@
 package logica;
 
+import java.time.LocalDate;
+
 public class Venta {
 	 private int num;
-	 private Fecha fecha;
+	 private LocalDate fecha;
 	 private String direccionEntrega;
 	 private String estado;
 	 private float montoTotal;
 	 private Orden orden;
 	 
-	 public Venta() {}
+	 public Venta(int num, LocalDate fecha, String direccionEntrega, String estado, float montoTotal) {
+	     this.num = num;
+	     this.fecha = fecha;
+	     this.direccionEntrega = direccionEntrega;
+	     this.estado = estado; 
+	     this.montoTotal = montoTotal;
+	     this.orden = new Orden();
+	    }
 	 
 	 public int getNumero() {
 		 return num;
 	 }
-
-	 public Fecha getFecha() {
-		 return fecha;
+	 
+	 public LocalDate getFecha() {
+	     return fecha;
 	 }
 
 	 public String getDireccionEntrega() {
