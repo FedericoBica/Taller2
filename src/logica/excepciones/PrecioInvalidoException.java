@@ -1,12 +1,12 @@
 package logica.excepciones;
 
-public class PostreNoExisteException extends Exception {
+public class PrecioInvalidoException extends Exception{
 	
 	private static final long serialVersionUID = 1L;
 	
 	private String mensaje;
 	
-	public PostreNoExisteException(String mensaje) {
+	public PrecioInvalidoException(String mensaje) {
 		this.mensaje = mensaje;
 	}
 	public String darMensaje() {

@@ -1,12 +1,12 @@
 package logica.excepciones;
 
-public class PostreNoExisteException extends Exception {
+public class PostreYaExisteException extends Exception{
 	
 	private static final long serialVersionUID = 1L;
 	
 	private String mensaje;
 	
-	public PostreNoExisteException(String mensaje) {
+	public PostreYaExisteException(String mensaje) {
 		this.mensaje = mensaje;
 	}
 	public String darMensaje() {
