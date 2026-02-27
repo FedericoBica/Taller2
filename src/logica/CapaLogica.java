@@ -14,17 +14,26 @@ import logica.excepciones.PrecioInvalidoException;
 import logica.excepciones.VentaNoExisteException;
 import logica.excepciones.VentaYaFinalizadaException;
 import java.time.LocalDate;
+import logica.Persistencia;
+import logica.vo.VOPostreListado;
+import logica.vo.VOPostreAlta;
+import logica.vo.VORecaudacion;
+import logica.vo.VOItemOrden;
+import java.io.Serializable;
 
-import logica.vo.VOPostre;
 
 
-public class CapaLogica {
+public class CapaLogica implements Serializable{
   private TreeMap<String, Postre> abbPostres;
   private ArrayList<Venta> listaVentas;
+  //private ArrayList<Orden> orden;
+
+  private Persistencia persistencia;
 
   public CapaLogica(){
     abbPostres= new TreeMap<>(); //diccionario ordenado por codigo
     listaVentas= new ArrayList<>(); //secuencia ventas
+    //orden = new ArrayList<>(); //secuencia orden
   }
 
   //REQUERIMIENTO: 1
@@ -59,38 +68,53 @@ public void altaPostre(VOPostre vo)
 }
   
 //REQUERIMIENTO: 2
-public void listadoGeneralPostres() {
-    for (Postre p : abbPostres.values()) {   // values() = todos los Postre
-        String tipo = p.isLight() ? "LIGHT" : "NORMAL";
-        System.out.println("Codigo es: " + p.getCodigo()
-                + " Nombre: " + p.getNombre()
-                + " Precio: " + p.getPrecio()
-                + " Tipo: " + tipo);
-    }
-}
-//REQUERIMIENTO: 3
-public void listadoDetalladoPostre(String codigo)
-    throws CodigoInvalidoException, PostreNoExisteException {
-// Verificar si está en el diccionario
-        if (!abbPostres.containsKey(codigo)) {
-            throw new PostreNoExisteException("El postre no está registrado con codigo: " + codigo);
-        }
-// Obtengo el postre
-    Postre p = abbPostres.get(codigo);
-// mostrar datos del postre
-    System.out.println("=DETALLE POSTRE=");
-    System.out.println("Codigo: " + p.getCodigo());
-    System.out.println("Nombre: " + p.getNombre());
-    System.out.println("Precio: " + p.getPrecio());
-    System.out.println("Tipo: " + p.getTipoPostre());
+public ArrayList<VOPostreListado> listadoGeneralPostres() {
 
-  // Si tipo=light entonces obtener además datos del light
-    if (p.getTipoPostre().equals("LIGHT")) {
+    ArrayList<VOPostreListado> lista = new ArrayList<>();
+    
+    for (Postre p : abbPostres.values()) {
+    	 String tipo = (p instanceof Light) ? "LIGHT" : "NORMAL";
+        VOPostreListado vo = new VOPostreListado(
+                p.getCodigo(),
+                p.getNombre(),
+                p.getPrecio(),
+                tipo
+        );
+        lista.add(vo);
+    }
+    return lista;
+}
+
+
+//REQUERIMIENTO: 3
+public VOPostreAlta listadoDetalladoPostre(String codigo)
+        throws PostreNoExisteException {
+    if (!abbPostres.containsKey(codigo)) {
+        throw new PostreNoExisteException("El postre no está registrado");
+    }
+    Postre p = abbPostres.get(codigo);
+    if (p instanceof Light) {
         Light l = (Light) p;
-        System.out.println("Endulzante: " + l.getTipoEndulzante());
-        System.out.println("Descripcion: " + l.getDescripcion());
+        return new VOPostreAlta(
+                l.getCodigo(),
+                l.getNombre(),
+                l.getPrecio(),
+                "LIGHT",
+                l.getTipoEndulzante(),
+                l.getDescripcion()
+        );
+    } else {
+        return new VOPostreAlta(
+                p.getCodigo(),
+                p.getNombre(),
+                p.getPrecio(),
+                "NORMAL",
+                null,
+                null
+        );
     }
 }
+
 //REQUERIMIENTO: 4
 public void comenzarVenta(LocalDate fecha, String direccion) throws FechaInvalidaException {
 
@@ -106,9 +130,68 @@ public void comenzarVenta(LocalDate fecha, String direccion) throws FechaInvalid
     Venta nueva = new Venta(fecha, direccion);
     listaVentas.add(nueva);
 }
+
+
+public VORecaudacion totalVentasPostreEnFecha(String codigoPostre, LocalDate fecha)
+        throws PostreNoExisteException {
+
+    if (!abbPostres.containsKey(codigoPostre)) {
+        throw new PostreNoExisteException("El postre no está registrado");
+    }
+
+    float montoTotal = 0;
+    int cantidadTotal = 0;
+
+    for (Venta v : listaVentas) {
+
+        if (v.getEstado().equals("FINALIZADA") &&
+            v.getFecha().equals(fecha)) {
+
+        	 Orden orden = v.getOrden();
+
+             ItemOrden[] items = orden.getItems();
+             int tope = orden.getTope();
+
+             for (int i = 0; i < tope; i++) {
+
+                 ItemOrden item = items[i];
+
+                 if (item.getPostre().getCodigo().equals(codigoPostre)) {
+
+                     montoTotal += item.getCantidad() * item.getPostre().getPrecio();
+                     cantidadTotal += item.getCantidad();
+                 }
+            }
+        }
+    }
+
+    return new VORecaudacion(montoTotal, cantidadTotal);
 }
 
+public void cargarDatos() {
+	
+    try {
+    	 CapaLogica aux = persistencia.recuperar("datos.dat");
 
-//REQUERI
+         this.abbPostres = aux.abbPostres;
+         this.listaVentas = aux.listaVentas;
 
-MIENTO: 5
+         System.out.println("Datos cargados correctamente");
+    } catch (Exception e) {
+        System.out.println("No había datos previos");
+    }
+}
+
+public void guardarDatos() {
+
+    try {
+        persistencia.respaldar("datos.dat", this);
+        System.out.println("Datos guardados correctamente");
+
+    } catch (Exception e) {
+        System.out.println("Error al guardar datos");
+    }
+}
+
+}
+
