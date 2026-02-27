@@ -12,7 +12,7 @@ public class Cliente {
 
             System.out.println("Conectado al servidor");
 
-            fachada.listarPostre(1);  // prueba
+            
 
         } catch (Exception e) {
             e.printStackTrace();

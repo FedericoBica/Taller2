@@ -5,7 +5,18 @@ public class Orden {
     private ItemOrden items[];
     private int tope;
 
-    public Orden() {}
+    public Orden(int max) {
+    	items = new ItemOrden[max];
+        tope = 0;
+    }
+    
+    public int getTope() {
+        return tope;
+    }
+    
+    public ItemOrden[] getItems() {
+        return items;
+    }
 
     public boolean InsBack(ItemOrden item) {
         if (tope < items.length) {
@@ -18,7 +29,7 @@ public class Orden {
     
     public ItemOrden find(String nombrePostre) {
     	for (int i = 0; i < tope; i++) {
-            if (items[i].getPostre().getNombre() == nombrePostre) {
+    		if (items[i].getPostre().getNombre().equals(nombrePostre)) {
                 return items[i];
             }
         }

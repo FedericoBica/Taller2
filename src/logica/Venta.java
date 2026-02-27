@@ -7,7 +7,6 @@ public class Venta {
 	 private LocalDate fecha;
 	 private String direccionEntrega;
 	 private String estado;
-	 private float montoTotal;
 	 private Orden orden;
 	 
 	 public Venta(int num, LocalDate fecha, String direccionEntrega, String estado, float montoTotal) {
@@ -15,8 +14,7 @@ public class Venta {
 	     this.fecha = fecha;
 	     this.direccionEntrega = direccionEntrega;
 	     this.estado = estado; 
-	     this.montoTotal = montoTotal;
-	     this.orden = new Orden();
+	     this.orden = new Orden(40);
 	    }
 	 
 	 public int getNumero() {
@@ -33,10 +31,6 @@ public class Venta {
 
 	 public String getEstado() {
 		 return estado;
-	 }
-
-	 public float getMontoTotal() {
-		 return montoTotal;
 	 }
 
 	 public Orden getOrden() {

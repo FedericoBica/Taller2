@@ -1,6 +1,7 @@
 package logica.vo;
+import java.io.Serializable;
 
-public class VORecaudacion {
+public class VORecaudacion implements Serializable {
     public float montoTotal;
     public int cantUnidades;
 
