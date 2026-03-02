@@ -1,6 +1,11 @@
 package logica.vo;
 
-public class VOVenta {
+import java.io.Serializable;
+
+public class VOVenta implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	 private int num;
 	 private String fecha;
 	 private String direccionEntrega;

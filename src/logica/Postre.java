@@ -1,6 +1,11 @@
 package logica;
 
-public class Postre {
+import java.io.Serializable;
+
+public class Postre implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private String codigo;
 	private String nombre;
 	private float precio;
@@ -21,5 +26,9 @@ public class Postre {
 
     public float getPrecio() {
         return precio;
+    }
+    
+    public String getTipoPostre() {
+    	return "NORMAL"; 
     }
 }

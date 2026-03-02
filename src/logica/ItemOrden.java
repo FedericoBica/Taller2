@@ -1,6 +1,10 @@
 package logica;
 
-public class ItemOrden {
+import java.io.Serializable;
+
+public class ItemOrden implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
     private Postre postre;
     private int cantidad;
@@ -16,6 +20,10 @@ public class ItemOrden {
 
     public int getCantidad() {
         return cantidad;
+    }
+    
+    public void setCantidad(int cantidad) {
+    	this.cantidad = cantidad;
     }
     
     public float calcularSubtotal() {

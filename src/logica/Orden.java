@@ -1,6 +1,10 @@
 package logica;
 
-public class Orden {
+import java.io.Serializable;
+
+public class Orden implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
     private ItemOrden items[];
     private int tope;
@@ -17,8 +21,12 @@ public class Orden {
     public ItemOrden[] getItems() {
         return items;
     }
+    
+    public ItemOrden getItem(int i) {
+        return items[i];
+    }
 
-    public boolean InsBack(ItemOrden item) {
+    public boolean insBack(ItemOrden item) {
         if (tope < items.length) {
             items[tope] = item;
             tope++;
@@ -27,13 +35,26 @@ public class Orden {
         return false;
     }
     
-    public ItemOrden find(String nombrePostre) {
+    public ItemOrden find(String codPostre) {
     	for (int i = 0; i < tope; i++) {
-    		if (items[i].getPostre().getNombre().equals(nombrePostre)) {
+    		if (items[i].getPostre().getNombre().equals(codPostre)) {
                 return items[i];
             }
         }
         return null;
+    }
+    
+    public boolean deleteOrden(String codPostre) {
+        for (int i = 0; i < tope; i++) {
+            if (items[i].getPostre().getCodigo().equals(codPostre)) {
+                for (int j = i; j < tope - 1; j++) {
+                    items[j] = items[j + 1];
+                }
+                items[tope-1] = null;
+                return true;
+            }
+        }
+        return false;
     }
    
     

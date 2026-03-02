@@ -1,6 +1,10 @@
 package logica.vo;
+import java.io.Serializable;
 
-public class VOItemOrden {
+public class VOItemOrden implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private int numVenta;
 	private String codigo;
 	private float precio;

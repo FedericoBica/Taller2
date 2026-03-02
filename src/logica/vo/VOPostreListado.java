@@ -1,6 +1,11 @@
 package logica.vo;
 
-public class VOPostreListado {
+import java.io.Serializable;
+
+public class VOPostreListado implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
     private String codigo;
     private String nombre;
     private float precio;

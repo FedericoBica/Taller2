@@ -2,6 +2,9 @@ package logica.vo;
 import java.io.Serializable;
 
 public class VORecaudacion implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
     public float montoTotal;
     public int cantUnidades;
 

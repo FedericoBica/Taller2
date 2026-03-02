@@ -1,8 +1,12 @@
 package logica.vo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class VOVentaAlta {
+public class VOVentaAlta implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
     public LocalDate fechaVenta;
     public String direccionEntrega;
 

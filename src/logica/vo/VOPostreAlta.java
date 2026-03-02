@@ -1,6 +1,11 @@
 package logica.vo;
 
-public class VOPostreAlta {
+import java.io.Serializable;
+
+public class VOPostreAlta implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private String codigo;
 	private String nombre;
 	private float precio;
@@ -17,6 +22,13 @@ public class VOPostreAlta {
         this.tipoEndulzante = tipoEndulzante;
         this.descripcion = descripcion;
 
+	}
+	
+	public VOPostreAlta(String codigo, String nombre, float precio, String tipo) {
+		this.codigo = codigo;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.tipo = tipo;
 	}
 
 	public String getCodigo() {
@@ -41,6 +53,10 @@ public class VOPostreAlta {
 
 	public String getDescripcion() {
 	        return descripcion;
+	}
+	
+	 public boolean isLight() {
+		 return "LIGHT".equals(tipo); 
 	}
 	
 }

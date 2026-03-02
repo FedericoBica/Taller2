@@ -5,11 +5,7 @@ import java.rmi.RemoteException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import logica.vo.VOPostreAlta;
-import logica.vo.VOPostreListado;
-import logica.vo.VOPostreVenta;
-import logica.vo.VORecaudacion;
-import logica.vo.VOVenta;
+import logica.vo.*;
 import logica.excepciones.*;
 
 public interface IFachada extends Remote {

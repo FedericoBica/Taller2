@@ -12,9 +12,7 @@ public class Monitor {
 
     public synchronized void comienzoLectura() {
         try {
-            while (escribiendo) {
-                wait();
-            }
+            while (escribiendo) wait();
             cantLectores++;
         }
         catch (InterruptedException e) {

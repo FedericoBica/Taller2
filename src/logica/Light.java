@@ -2,6 +2,8 @@ package logica;
 
 public class Light extends Postre {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private String tipoEndulzante;
 	private String descripcion;
 
@@ -17,5 +19,9 @@ public class Light extends Postre {
     
     public String getDescripcion() {
         return descripcion;
+    }
+    
+    public String getTipoPostre() {
+    	return "LIGHT"; 
     }
 }
