@@ -9,9 +9,9 @@ public class ItemOrden implements Serializable {
     private Postre postre;
     private int cantidad;
 
-    public ItemOrden(Postre postre, int cantidad) {
-        this.postre = postre;
+    public ItemOrden(int cantidad, Postre postre) {
         this.cantidad = cantidad;
+        this.postre = postre;
     }
 
     public Postre getPostre() {

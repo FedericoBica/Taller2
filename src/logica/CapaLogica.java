@@ -1,5 +1,6 @@
 package logica;
 
+import logica.vo.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -18,7 +19,7 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
     private static final long serialVersionUID = 1L;
  
     private TreeMap<String, Postre> abbPostres;
-    private ArrayList<Venta>        listaVentas;
+    private ArrayList<Venta> listaVentas;
 
    
     private Monitor monitor;
@@ -27,11 +28,11 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
 
    
     public CapaLogica() throws RemoteException {
-        abbPostres   = new TreeMap<>();
-        listaVentas  = new ArrayList<>();
-        monitor      = new Monitor();
+        abbPostres = new TreeMap<>();
+        listaVentas = new ArrayList<>();
+        monitor = new Monitor();
         persistencia = new Persistencia();
-        nomArchivo   = cargarNombreArchivo();
+        nomArchivo = cargarNombreArchivo();
     }
 
     private String cargarNombreArchivo() {
@@ -179,15 +180,15 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         monitor.comienzoEscritura();
         try {
             String codigo   = vo.getCodigo();
-            int    cantidad = vo.getCantidad();
-            int    numVenta = vo.getNumVenta();
+            int cantidad = vo.getCantidad();
+            int numVenta = vo.getNumVenta();
 
             Venta venta = buscarVenta(numVenta);
 
             if (!venta.getEstado().equals("EN_PROCESO"))
                 throw new VentaYaFinalizadaException("La venta ya fue finalizada.");
 
-            Orden     orden    = venta.getOrden();
+            Orden orden = venta.getOrden();
             ItemOrden existente = orden.find(codigo);
 
             if (existente == null)
@@ -262,19 +263,23 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
     }
 
     // ── REQ 9: Listado postres de una venta ──────────────────────────────────
-    public ArrayList<VOPostreVenta> listadoPostresDeVenta(int numVenta)
+    public ArrayList<VOItemOrden> listadoPostresDeVenta(int numVenta)
             throws RemoteException, VentaNoExisteException {
         monitor.comienzoLectura();
         try {
             Venta venta = buscarVenta(numVenta);
             Orden orden = venta.getOrden();
-            ArrayList<VOPostreVenta> lista = new ArrayList<>();
+            ArrayList<VOItemOrden> lista = new ArrayList<>();
             for (int i = 0; i < orden.getTope(); i++) {
                 ItemOrden item = orden.getItem(i);
-                Postre    p    = item.getPostre();
-                lista.add(new VOPostreVenta( p.getCodigo(), p.getNombre(), p.getPrecio(),
-                        p.getTipoPostre(), item.getCantidad()));
-            }
+                Postre p = item.getPostre();
+                lista.add(new VOItemOrden(
+                        venta.getNumero(),        
+                        p.getCodigo(),            
+                        p.getPrecio(),           
+                        p.getTipoPostre(),        
+                        item.getCantidad()        
+                ));
             return lista;
         } finally {
             monitor.terminoLectura();

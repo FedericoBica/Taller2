@@ -58,7 +58,7 @@ public interface IFachada extends Remote {
             throws RemoteException;
 
     // 9 - Listado postres de una venta
-    ArrayList<VOPostreVenta> listadoPostresDeVenta(int numVenta)
+    ArrayList<VOItemOrden> listadoPostresDeVenta(int numVenta)
             throws RemoteException,
                    VentaNoExisteException;
 
