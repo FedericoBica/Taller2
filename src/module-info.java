@@ -6,5 +6,11 @@
  *
  */
 module Taller2 {
-	requires java.rmi;
+
+    requires java.rmi;
+
+    exports logica;
+    exports logica.vo;
+    exports logica.excepciones;
+
 }

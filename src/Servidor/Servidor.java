@@ -18,8 +18,8 @@ public class Servidor {
              System.err.println("No se pudo leer config.properties: " + e.getMessage());
          }
 
-         String ip     = props.getProperty("ipServidor",    "127.0.0.1");
-         int    puerto = Integer.parseInt(props.getProperty("puertoServidor", "1099"));
+         String ip = props.getProperty("ipServidor", "127.0.0.1");
+         int puerto = Integer.parseInt(props.getProperty("puertoServidor", "1099"));
 
 
         try {

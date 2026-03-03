@@ -7,13 +7,15 @@ public class VOItemOrden implements Serializable {
 	
 	private int numVenta;
 	private String codigo;
+	private String nombre;
 	private float precio;
 	private String tipo;
 	private int cantUnidades;
 
-	public VOItemOrden (int numVenta, String codigo, float precio, String tipo, int cantUnidades) {
+	public VOItemOrden (int numVenta, String codigo,String nombre, float precio, String tipo, int cantUnidades) {
 		this.numVenta = numVenta;
 		this.codigo = codigo;
+		this.nombre = nombre;
 		this.precio = precio;
 		this.tipo = tipo;
 		this.cantUnidades = cantUnidades;
@@ -26,6 +28,11 @@ public class VOItemOrden implements Serializable {
 	public String getCodigo() {
 	      return codigo;
 	}
+	
+	public String getNombre() {
+	      return nombre;
+	}
+
 
 	public float getPrecio() {
 	      return precio;

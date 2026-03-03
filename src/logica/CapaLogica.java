@@ -1,6 +1,6 @@
 package logica;
 
-import logica.vo.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -275,11 +275,13 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
                 Postre p = item.getPostre();
                 lista.add(new VOItemOrden(
                         venta.getNumero(),        
-                        p.getCodigo(),            
+                        p.getCodigo(), 
+                        p.getNombre(),
                         p.getPrecio(),           
                         p.getTipoPostre(),        
                         item.getCantidad()        
                 ));
+            }
             return lista;
         } finally {
             monitor.terminoLectura();
