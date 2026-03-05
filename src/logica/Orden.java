@@ -32,12 +32,13 @@ public class Orden implements Serializable {
             tope++;
             return true;
         }
+        
         return false;
     }
     
     public ItemOrden find(String codPostre) {
     	for (int i = 0; i < tope; i++) {
-    		if (items[i].getPostre().getNombre().equals(codPostre)) {
+    		if (items[i].getPostre().getCodigo().equals(codPostre)) {
                 return items[i];
             }
         }
@@ -51,6 +52,7 @@ public class Orden implements Serializable {
                     items[j] = items[j + 1];
                 }
                 items[tope-1] = null;
+                tope--;
                 return true;
             }
         }

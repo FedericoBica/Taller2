@@ -22,8 +22,8 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
     private ArrayList<Venta> listaVentas;
 
    
-    private Monitor monitor;
-    private Persistencia persistencia;
+    private transient Monitor monitor;
+    private transient Persistencia persistencia;
     private String nomArchivo; 
 
    
@@ -47,7 +47,7 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         return "datos.dat";
     }
 
-    // ── REQ 1: Alta postre ───────────────────────────────────────────────────
+    //  REQ 1: Alta postre ────────────────────────────
     public void altaPostre(VOPostreAlta vo)
             throws RemoteException, PostreYaExisteException,
                    CodigoInvalidoException, PrecioInvalidoException {
@@ -79,7 +79,7 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         }
     }
 
-    // ── REQ 2: Listado general de postres ────────────────────────────────────
+    // ─ REQ 2: Listado general de postres ─────────
     public ArrayList<VOPostreListado> listadoGeneralPostres() throws RemoteException {
         monitor.comienzoLectura();
         try {
@@ -94,7 +94,7 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         }
     }
 
-    // ── REQ 3: Detalle de un postre ──────────────────────────────────────────
+    // ── REQ 3: Detalle de un postre ─────────────────
     public VOPostreAlta listadoDetalladoPostre(String codigo)
             throws RemoteException, PostreNoExisteException {
         monitor.comienzoLectura();
@@ -114,7 +114,7 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         }
     }
 
-    // ── REQ 4: Comenzar venta ────────────────────────────────────────────────
+    //  REQ 4: Comenzar venta ────────────────────────────────────────────────
     public void comenzarVenta(LocalDate fecha, String direccion)
             throws RemoteException, FechaInvalidaException {
         monitor.comienzoEscritura();
@@ -133,7 +133,7 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         }
     }
 
-    // ── REQ 5: Agregar postre a venta ────────────────────────────────────────
+    //  REQ 5: Agregar postre a venta ────────────────────────────────────────
     public void agregarPostreAVenta(VOPostreVenta vo)
             throws RemoteException, VentaNoExisteException,
                    VentaYaFinalizadaException, PostreNoExisteException,
@@ -172,7 +172,7 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         }
     }
 
-    // ── REQ 6: Eliminar postre de venta ──────────────────────────────────────
+    // ─ REQ 6: Eliminar postre de venta ────────────────────────────
     public void eliminarPostreDeVenta(VOPostreVenta vo)
             throws RemoteException, VentaNoExisteException,
                    VentaYaFinalizadaException, PostreNoExisteException,
@@ -208,7 +208,7 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         }
     }
 
-    // ── REQ 7: Finalizar venta ───────────────────────────────────────────────
+    // ── REQ 7: Finalizar venta ────────────────────
     public float finalizarVenta(int numVenta, boolean confirmar)
             throws RemoteException, VentaNoExisteException, VentaYaFinalizadaException {
         monitor.comienzoEscritura();
@@ -219,8 +219,6 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
                 throw new VentaYaFinalizadaException("La venta ya fue finalizada.");
 
             Orden orden = venta.getOrden();
-
-            // Empty order → remove and return 0
             if (orden.calcularCantTotal() == 0) {
                 listaVentas.remove(venta);
                 return 0;
@@ -238,7 +236,7 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         }
     }
 
-    // ── REQ 8: Listado ventas ────────────────────────────────────────────────
+    // ── REQ 8: Listado ventas ────────────
     public ArrayList<VOVenta> listadoVentas(char tipo) throws RemoteException {
         monitor.comienzoLectura();
         try {
@@ -262,7 +260,7 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         }
     }
 
-    // ── REQ 9: Listado postres de una venta ──────────────────────────────────
+    // ── REQ 9: Listado postres de una venta ────────────────
     public ArrayList<VOItemOrden> listadoPostresDeVenta(int numVenta)
             throws RemoteException, VentaNoExisteException {
         monitor.comienzoLectura();
@@ -288,7 +286,7 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         }
     }
 
-    // ── REQ 10: Total ventas de un postre en una fecha ───────────────────────
+    // ── REQ 10: Total ventas de un postre en una fecha ────────────────────
     public VORecaudacion totalVentasPostreEnFecha(String codigoPostre, LocalDate fecha)
             throws RemoteException, PostreNoExisteException {
         monitor.comienzoLectura();
@@ -317,7 +315,7 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         }
     }
 
-    // ── REQ 11: Respaldar datos ──────────────────────────────────────────────
+    // ─ REQ 11: Respaldar datos ──────
 
     public void respaldarDatos() throws RemoteException, PersistenciaException {
         monitor.comienzoLectura();
@@ -328,14 +326,16 @@ public class CapaLogica extends UnicastRemoteObject implements IFachada, Seriali
         }
     }
 
-    // ── REQ 12: Recuperar datos ──────────────────────────────────────────────
+    //  REQ 12: Recuperar datos ───────────────
     public void recuperarDatos() throws RemoteException, PersistenciaException {
         monitor.comienzoEscritura();
         try {
             CapaLogica aux = persistencia.recuperar(nomArchivo);
             this.abbPostres  = aux.abbPostres;
             this.listaVentas = aux.listaVentas;
-            // Restore counter so new ventas don't collide
+            this.monitor = new Monitor();
+            this.persistencia = new Persistencia();
+            
             if (!listaVentas.isEmpty()) {
                 int maxNum = listaVentas.stream()
                         .mapToInt(Venta::getNumero).max().orElse(0);

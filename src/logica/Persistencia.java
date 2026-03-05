@@ -15,6 +15,7 @@ public class Persistencia {
             o.close();
             f.close();
         } catch (IOException e) {
+ 
             e.printStackTrace();
             throw new PersistenciaException("Error al respaldar datos");
         }
