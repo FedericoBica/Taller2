@@ -132,7 +132,6 @@ public class VentanaAltaPostre {
             JOptionPane.showMessageDialog(frame, "Completa todos los campos obligatorios.", "Atencion", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         float precio;
         try {
             precio = Float.parseFloat(precioStr);

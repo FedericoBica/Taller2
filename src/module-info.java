@@ -13,5 +13,6 @@ module Taller2 {
     exports logica;
     exports logica.vo;
     exports logica.excepciones;
+    exports grafica.ventanas;
     
 }
