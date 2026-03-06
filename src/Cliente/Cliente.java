@@ -7,6 +7,7 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import logica.IFachada;
+import grafica.ventanas.VentanaPrincipal;
 
 public class Cliente {
 
@@ -20,8 +21,8 @@ public class Cliente {
             System.err.println("No se pudo leer config.properties: " + e.getMessage());
         }
 
-        String ip     = props.getProperty("ipServidor",    "127.0.0.1");
-        int    puerto = Integer.parseInt(props.getProperty("puertoServidor", "1099"));
+        String ip = props.getProperty("ipServidor",    "127.0.0.1");
+        int puerto = Integer.parseInt(props.getProperty("puertoServidor", "1099"));
 
         try {
             String url = "rmi://" + ip + ":" + puerto + "/Fachada";

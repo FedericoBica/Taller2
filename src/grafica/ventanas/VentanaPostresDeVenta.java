@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import logica.IFachada;
 import logica.vo.VOPostreVenta;
 
-public class VentanaPostreVenta {
+public class VentanaPostresDeVenta {
 
     private JFrame frame;
     private JLabel labelNumVenta;
@@ -64,7 +64,7 @@ public class VentanaPostreVenta {
         btnCerrar.setBounds(200, 330, 100, 25);
         panel.add(btnCerrar);
 
-        final VentanaPostreVenta ventana = this;
+        final VentanaPostresDeVenta ventana = this;
 
         btnBuscar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -87,7 +87,7 @@ public class VentanaPostreVenta {
         frame.setVisible(b);
     }
 
-    public VentanaPostreVenta(IFachada fachada) {
+    public VentanaPostresDeVenta(IFachada fachada) {
         this.fachada = fachada;
         this.initialize();
         this.setVisible(false);
