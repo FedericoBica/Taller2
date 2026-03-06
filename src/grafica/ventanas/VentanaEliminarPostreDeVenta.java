@@ -5,16 +5,15 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import logica.IFachada;
-import logica.vo.VOPostreVenta;
+import grafica.controladores.ControladorEliminarPostre;
 
-public class VentanaEliminarPostre {
+public class VentanaEliminarPostreDeVenta {
 
     private JFrame frame;
     private JTextField textFieldNumVenta;
     private JTextField textFieldCodigo;
     private JTextField textFieldCantidad;
-    private IFachada fachada;
+    private ControladorEliminarPostre controlador;
 
     private void initialize() {
         frame = new JFrame();
@@ -38,23 +37,22 @@ public class VentanaEliminarPostre {
 
         JButton btnCerrar = new JButton("CERRAR");
         btnCerrar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnCerrar.setBackground(new Color(200, 200, 200));
-        btnCerrar.setBounds(50, 110, 100, 25);
-        panel.add(btnCerrar);
+        btnCerrar.setBackground(new Color(200,200,200));
+        btnCerrar.setBounds(50,110,100,25); panel.add(btnCerrar);
 
         JButton btnEliminar = new JButton("ELIMINAR");
         btnEliminar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnEliminar.setBackground(new Color(255, 182, 193));
-        btnEliminar.setBounds(180, 110, 100, 25);
-        panel.add(btnEliminar);
+        btnEliminar.setBackground(new Color(255,182,193));
+        btnEliminar.setBounds(180,110,100,25); panel.add(btnEliminar);
 
-        final VentanaEliminarPostre ventana = this;
         btnEliminar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) { ventana.eliminar(); }
+            public void actionPerformed(ActionEvent e) { eliminar(); }
         });
         btnCerrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) { frame.dispose(); }
         });
+
+        controlador = new ControladorEliminarPostre(this);
     }
 
     private void eliminar() {
@@ -62,32 +60,35 @@ public class VentanaEliminarPostre {
         String cantStr = textFieldCantidad.getText().trim();
         String numStr = textFieldNumVenta.getText().trim();
         if (codigo.isEmpty() || cantStr.isEmpty() || numStr.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Completa todos los campos.", "Atencion", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        int cantidad, numVenta;
-        try { 
-        	cantidad = Integer.parseInt(cantStr); 
-        	numVenta = Integer.parseInt(numStr); }
-        catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(frame, "Cantidad y Nro deben ser enteros.", "Atencion", JOptionPane.WARNING_MESSAGE);
+            mostrarError("Completa todos los campos.");
             return;
         }
         try {
-            fachada.eliminarPostreDeVenta(new VOPostreVenta(codigo, cantidad, numVenta));
-            JOptionPane.showMessageDialog(frame, "Postre eliminado correctamente.", "Exito", JOptionPane.INFORMATION_MESSAGE);
-            textFieldCodigo.setText(""); textFieldCantidad.setText("");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            int cantidad = Integer.parseInt(cantStr);
+            int numVenta = Integer.parseInt(numStr);
+            controlador.eliminarPostre(codigo, cantidad, numVenta);
+        } catch (NumberFormatException ex) {
+            mostrarError("Cantidad y Nro. deben ser enteros.");
         }
     }
 
-    public void setVisible(boolean b) { 
-    	frame.setVisible(b); 
+    // ── Métodos invocados por el controlador ──────────────────────────────
+    public void mostrarExito(String mensaje) {
+        JOptionPane.showMessageDialog(frame, mensaje, "Exito", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public VentanaEliminarPostre(IFachada fachada) {
-        this.fachada = fachada;
+    public void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(frame, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void limpiarCampos() {
+        textFieldCodigo.setText("");
+        textFieldCantidad.setText("");
+    }
+
+    public void setVisible(boolean b) { frame.setVisible(b); }
+
+    public VentanaEliminarPostreDeVenta() {
         this.initialize();
         this.setVisible(false);
     }

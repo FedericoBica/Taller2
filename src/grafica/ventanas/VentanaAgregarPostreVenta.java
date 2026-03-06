@@ -5,8 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import logica.IFachada;
-import logica.vo.VOPostreVenta;
+import grafica.controladores.ControladorAgregarPostreVenta;
 
 public class VentanaAgregarPostreVenta {
 
@@ -14,7 +13,7 @@ public class VentanaAgregarPostreVenta {
     private JTextField textFieldNumVenta;
     private JTextField textFieldCodigo;
     private JTextField textFieldCantidad;
-    private IFachada fachada;
+    private ControladorAgregarPostreVenta controlador;
 
     private void initialize() {
         frame = new JFrame();
@@ -38,23 +37,22 @@ public class VentanaAgregarPostreVenta {
 
         JButton btnCerrar = new JButton("CERRAR");
         btnCerrar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnCerrar.setBackground(new Color(200, 200, 200));
-        btnCerrar.setBounds(50, 110, 100, 25);
-        panel.add(btnCerrar);
+        btnCerrar.setBackground(new Color(200,200,200));
+        btnCerrar.setBounds(50,110,100,25); panel.add(btnCerrar);
 
         JButton btnAgregar = new JButton("AGREGAR");
         btnAgregar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnAgregar.setBackground(new Color(173, 216, 230));
-        btnAgregar.setBounds(180, 110, 100, 25);
-        panel.add(btnAgregar);
+        btnAgregar.setBackground(new Color(173,216,230));
+        btnAgregar.setBounds(180,110,100,25); panel.add(btnAgregar);
 
-        final VentanaAgregarPostreVenta ventana = this;
         btnAgregar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) { ventana.agregar(); }
+            public void actionPerformed(ActionEvent e) { agregar(); }
         });
         btnCerrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) { frame.dispose(); }
         });
+
+        controlador = new ControladorAgregarPostreVenta(this);
     }
 
     private void agregar() {
@@ -62,28 +60,35 @@ public class VentanaAgregarPostreVenta {
         String cantStr = textFieldCantidad.getText().trim();
         String nroStr = textFieldNumVenta.getText().trim();
         if (codigo.isEmpty() || cantStr.isEmpty() || nroStr.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Completa todos los campos.", "Atencion", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        int cantidad, numVenta;
-        try { cantidad = Integer.parseInt(cantStr); numVenta = Integer.parseInt(nroStr); }
-        catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(frame, "Cantidad y Nro. deben ser enteros.", "Atencion", JOptionPane.WARNING_MESSAGE);
+            mostrarError("Completa todos los campos.");
             return;
         }
         try {
-            fachada.agregarPostreAVenta(new VOPostreVenta(codigo, cantidad, numVenta));
-            JOptionPane.showMessageDialog(frame, "Postre agregado correctamente.", "Exito", JOptionPane.INFORMATION_MESSAGE);
-            textFieldCodigo.setText(""); textFieldCantidad.setText("");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(frame, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            int cantidad = Integer.parseInt(cantStr);
+            int numVenta = Integer.parseInt(nroStr);
+            controlador.agregarPostre(codigo, cantidad, numVenta);
+        } catch (NumberFormatException ex) {
+            mostrarError("Cantidad y Nro. deben ser enteros.");
         }
+    }
+
+    // ── Métodos invocados por el controlador ──────────────────────────────
+    public void mostrarExito(String mensaje) {
+        JOptionPane.showMessageDialog(frame, mensaje, "Exito", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(frame, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void limpiarCampos() {
+        textFieldCodigo.setText("");
+        textFieldCantidad.setText("");
     }
 
     public void setVisible(boolean b) { frame.setVisible(b); }
 
-    public VentanaAgregarPostreVenta(IFachada fachada) {
-        this.fachada = fachada;
+    public VentanaAgregarPostreVenta() {
         this.initialize();
         this.setVisible(false);
     }

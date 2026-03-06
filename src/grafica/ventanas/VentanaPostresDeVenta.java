@@ -7,19 +7,16 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import logica.IFachada;
-import logica.vo.VOPostreVenta;
+import logica.vo.VOItemOrden;
+import grafica.controladores.ControladorPostresDeVenta;
 
 public class VentanaPostresDeVenta {
 
     private JFrame frame;
-    private JLabel labelNumVenta;
     private JTextField textFieldNumVenta;
-    private JButton btnBuscar;
-    private JButton btnCerrar;
     private JTable tabla;
     private DefaultTableModel modelo;
-    private IFachada fachada;
+    private ControladorPostresDeVenta controlador;
 
     private void initialize() {
         frame = new JFrame();
@@ -32,19 +29,13 @@ public class VentanaPostresDeVenta {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         panel.setLayout(null);
 
-        labelNumVenta = new JLabel("Nro. de Venta:");
-        labelNumVenta.setBounds(10, 12, 110, 14);
-        panel.add(labelNumVenta);
+        JLabel lNro = new JLabel("Nro. de Venta:"); lNro.setBounds(10,12,110,14); panel.add(lNro);
+        textFieldNumVenta = new JTextField(); textFieldNumVenta.setBounds(125,9,120,20); panel.add(textFieldNumVenta);
 
-        textFieldNumVenta = new JTextField();
-        textFieldNumVenta.setBounds(125, 9, 120, 20);
-        panel.add(textFieldNumVenta);
-
-        btnBuscar = new JButton("BUSCAR");
+        JButton btnBuscar = new JButton("BUSCAR");
         btnBuscar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnBuscar.setBackground(new Color(173, 216, 230));
-        btnBuscar.setBounds(260, 8, 90, 23);
-        panel.add(btnBuscar);
+        btnBuscar.setBackground(new Color(173,216,230));
+        btnBuscar.setBounds(260,8,90,23); panel.add(btnBuscar);
 
         String[] columnas = {"Codigo", "Nombre", "Precio", "Tipo", "Cantidad"};
         modelo = new DefaultTableModel(columnas, 0) {
@@ -55,40 +46,50 @@ public class VentanaPostresDeVenta {
         tabla.getTableHeader().setReorderingAllowed(false);
 
         JScrollPane scroll = new JScrollPane(tabla);
-        scroll.setBounds(10, 40, 485, 280);
-        panel.add(scroll);
+        scroll.setBounds(10,40,485,280); panel.add(scroll);
 
-        btnCerrar = new JButton("CERRAR");
+        JButton btnCerrar = new JButton("CERRAR");
         btnCerrar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnCerrar.setBackground(new Color(200, 200, 200));
-        btnCerrar.setBounds(200, 330, 100, 25);
-        panel.add(btnCerrar);
-
-        final VentanaPostresDeVenta ventana = this;
+        btnCerrar.setBackground(new Color(200,200,200));
+        btnCerrar.setBounds(200,330,100,25); panel.add(btnCerrar);
 
         btnBuscar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ventana.buscar();
+                String str = textFieldNumVenta.getText().trim();
+                if (str.isEmpty()) { mostrarError("Ingresa el numero de venta."); return; }
+                try {
+                    controlador.buscarPostresDeVenta(Integer.parseInt(str));
+                } catch (NumberFormatException ex) {
+                    mostrarError("El numero debe ser un entero.");
+                }
             }
         });
-
         btnCerrar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                frame.dispose();
-            }
+            public void actionPerformed(ActionEvent e) { frame.dispose(); }
         });
+
+        controlador = new ControladorPostresDeVenta(this);
     }
 
-  /*  private void buscar() {
-        
-    }*/
-
-    public void setVisible(boolean b) {
-        frame.setVisible(b);
+    // ── Métodos invocados por el controlador ──────────────────────────────
+    public void mostrarListado(ArrayList<VOItemOrden> lista) {
+        modelo.setRowCount(0);
+        for (VOItemOrden vo : lista) {
+            modelo.addRow(new Object[]{
+                vo.getCodigo(), vo.getNombre(),
+                String.format("$ %.2f", vo.getPrecio()),
+                vo.getTipo(), vo.getCantUnidades()
+            });
+        }
     }
 
-    public VentanaPostresDeVenta(IFachada fachada) {
-        this.fachada = fachada;
+    public void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(frame, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void setVisible(boolean b) { frame.setVisible(b); }
+
+    public VentanaPostresDeVenta() {
         this.initialize();
         this.setVisible(false);
     }
