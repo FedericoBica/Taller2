@@ -9,6 +9,6 @@ public PostreNoEnVentaException(String mensaje){
 }
 
 public String darMensaje(){
-
+  return mensaje;
 }
 } 
