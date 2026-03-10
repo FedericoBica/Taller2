@@ -1,14 +1,12 @@
 package logica.vo;
 
+public class VOItemsOrden {
+
 private int NumVenta;
 private String Codigo;
 private float Precio;
 private String Tipo;
 private int CantUnidades;
-
-public class VOItemsOrden {
-
-}
 
 public int getNumVenta() {
       return numVenta;
@@ -24,4 +22,5 @@ public float getPrecio() {
 
 public String getTipo() {
       return tipo;
+}
 }
