@@ -1,6 +1,7 @@
 package grafica.controladores;
 
 import grafica.ventanas.VentanaComenzarVenta;
+import logica.vo.VOVentaAlta;
 import logica.excepciones.FechaInvalidaException;
 import java.rmi.RemoteException;
 import java.time.LocalDate;
@@ -16,7 +17,8 @@ public class ControladorComenzarVenta extends ControladorBase {
 
     public void comenzarVenta(LocalDate fecha, String direccion) {
         try {
-            fachada.comenzarVenta(fecha, direccion);
+        	VOVentaAlta vo = new VOVentaAlta(fecha, direccion);
+            fachada.comenzarVenta(vo);
             ventana.mostrarExito("Venta iniciada correctamente.");
             ventana.cerrar();
         } catch (FechaInvalidaException ex) {

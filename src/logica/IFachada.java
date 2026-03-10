@@ -27,7 +27,7 @@ public interface IFachada extends Remote {
                    PostreNoExisteException;
 
     // REQ 4 - Comenzar venta
-    void comenzarVenta(LocalDate fecha, String direccion)
+    void comenzarVenta(VOVentaAlta vo)
             throws RemoteException,
                    FechaInvalidaException;
 
@@ -48,7 +48,7 @@ public interface IFachada extends Remote {
                    CantidadInvalidaException;
 
     // 7 - Finalizar venta
-    float finalizarVenta(int numVenta, boolean confirmada)
+    float finalizarVenta(VOFinalizacion vo)
             throws RemoteException,
                    VentaNoExisteException,
                    VentaYaFinalizadaException;

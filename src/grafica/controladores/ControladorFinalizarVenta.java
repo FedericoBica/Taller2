@@ -1,6 +1,7 @@
 package grafica.controladores;
 
 import grafica.ventanas.VentanaFinalizarVenta;
+import logica.vo.VOFinalizacion;
 import logica.excepciones.*;
 import java.rmi.RemoteException;
 
@@ -15,7 +16,8 @@ public class ControladorFinalizarVenta extends ControladorBase {
 
     public void finalizarVenta(int numVenta, boolean confirmar) {
         try {
-            float monto = fachada.finalizarVenta(numVenta, confirmar);
+        	VOFinalizacion vo = new VOFinalizacion(numVenta, confirmar);
+            float monto = fachada.finalizarVenta(vo);
             if (confirmar) {
                 ventana.mostrarExito(String.format("Venta finalizada. Monto total: $ %.2f", monto));
             } else {
